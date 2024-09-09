@@ -1,0 +1,532 @@
+openapi: 3.0.2
+info:
+  title: CPEN 391 Project
+  version: 1.1.0
+  contact:
+    name: Hansen Dan
+  description: API Specification for the Cloud Component of the CPEN391 Project.
+servers:
+  - url: http://localhost:9000
+tags:
+  - name: registration
+    description: Console Registration Management
+  - name: logic
+    description: Console Rendering, Game Logic, and Event Scheduling
+  - name: session
+    description: User Session Management
+  - name: gameplay
+    description: Gameplay Functions
+paths:
+  /console/register:
+    post:
+      tags:
+        - registration
+      summary: registers a new session for a console.
+      description: >-
+        Allows the hardware component to register itself as an active system. A
+        session will be created for it on the server, allowing users to join.
+        The session_id of the console is returned as well as provided in the
+        Set-Cookie header. This cookie is needed for subsequent operations.
+      operationId: api.console_register
+      responses:
+        '200':
+          description: OK - registration successful
+          headers:
+            Set-Cookie:
+              description: unique identifier for this console
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id:
+                    type: integer
+        '400':
+          description: Bad Request - operation unsuccessful
+  /console/unregister:
+    post:
+      tags:
+        - registration
+      summary: unregisters a console's session.
+      description: >-
+        Allows the hardware component to unregister itself as an active session.
+        Users in that session will be dropped and ongoing games will be
+        terminated. 
+      operationId: api.console_unregister
+      parameters:
+        - name: session_id
+          in: cookie
+          description: identifier for this console/session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - session unregistered successfully
+          headers:
+            Set-Cookie:
+              description: empty string to invalidate cookie
+              schema:
+                type: string
+        '400':
+          description: Bad Request - operation unsuccessful or session did not exist
+  /console/render:
+    get:
+      tags:
+        - logic
+      summary: returns the list of entities and their positions.
+      description: >-
+        Allows the hardware component to obtain the current game status and, if
+        applicable, a list of the entities current present on the playing field
+        and their positions for rendering. The gamestate property indicates the
+        current state of the game (waiting to start, ongoing, etc). Within the
+        list, environmental objects come first, then character positions, then
+        placed objects (such as bombs). The hardware component should call this
+        endpoint with a reasonable frequency, to indicate to the server that it
+        is still alive.
+      operationId: api.console_render
+      parameters:
+        - name: session_id
+          in: cookie
+          description: identifier for this console/session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - entity list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gamestate:
+                    type: string
+                    enum:
+                      - empty
+                      - waiting
+                      - active
+                  entities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entity'
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event_Damage'
+        '401':
+          description: Unauthenticated - unregistered consoles cannot obtain an entity list
+  /console/resolve:
+    post:
+      tags:
+        - logic
+      summary: report results of events resolved by console 
+      description: >-
+        Allows the hardware component to report the results of resolved events to 
+        the cloud component. For example, events, such as explosion hit registration,
+        are sent to the console via the console/render endpoint. For each square the 
+        explosion will hit, a Damage_Event is registered at that location. After a
+        certain delay (corresponding to the bomb detonation delay), the event will 
+        be resolved by checking if a player is in the location where the event is 
+        registered. If so, the information about which player took how much damage 
+        will be posted to this endpoint. 
+      operationId: api.console_resolve
+      requestBody:
+        description: Array of Simple Damage Event Resolution objects.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Simple_Damage'
+        required: true
+      responses:
+        '200':
+          description: OK - event resolution processed
+  /user: 
+    post: 
+      tags:
+        - session 
+      summary: create new user account 
+      description: >-
+        Creates a new user account with the given credentials. Does not log in the user.
+      operationId: api.user 
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                username:
+                  type: string
+                saltedhash_password:
+                  type: string
+      responses:
+        '200': 
+          description: OK - successful operation
+  /user/login:
+    post: 
+      tags:
+        - session 
+      summary: logs user into system 
+      description: >-
+        Logs user into system using given credentials.
+      operationId: api.user_login
+      requestBody:
+        description: username and password in salted hash for login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                saltedhash_password:
+                  type: string
+      responses:
+        '200':
+          description: OK - login successful
+          headers:
+            Set-Cookie:
+              description: unique identifier for this user in this session
+              schema:
+                type: string
+        '400':
+          description: Bad Request - invalid login
+  /user/logout:
+    get:
+      tags:
+        - session
+      summary: logs out current user from session
+      description: >-
+        Logs user out of system.
+      operationId: api.
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            Set-Cookie:
+              description: empty string to invalidate cookie
+              schema:
+                type: string
+  /user/sessionlist:
+    get:
+      tags:
+        - session
+      summary: obtain session list
+      description: >-
+        Allows the user compontent to obtain a list of the currently active
+        console sessions for display. Information is given as an array of
+        objects - each object contains the id, number of current players, and
+        maximum number of players for a specific session.
+      operationId: api.user_sessionlist
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - list of sessions obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+  /user/join/{session_id}:
+    get:
+      tags:
+        - session
+      summary: join a specific console session
+      description: >-
+        Allows the user component to request to join a specific session. The
+        session to join is specified by the session_id argument located in the
+        URL path. These session ids are the same as those returned by
+        /sessionlist. Upon joining a session, the user is assigned an unique id
+        specific to that session, in the form of a cookie. This cookie is needed
+        for subsequent requests.
+      operationId: api.user_join
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+        - name: session_id
+          in: path
+          description: session_id to join
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK - session joined successfully
+        '400':
+          description: Bad Request - session could not be joined
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+        '404':
+          description: Not Found - specified session not found
+  /user/leave:
+    get:
+      tags:
+        - session
+      summary: leave the current session.
+      description: >-
+        Allows the user component to leave a session they have previously
+        joined.
+      operationId: api.user_leave
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - session left successfully
+        '400':
+          description: Bad Request - operation was unsuccessful
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+  /user/currentsession:
+    get:
+      tags:
+        - session
+      summary: current session info
+      description: >-
+        Allows the user component to retrieve information describing the session
+        that they are in.
+      operationId: api.user_currentsession
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - session information returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request - operation was unsuccessful
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+  /user/start:
+    get:
+      tags:
+        - session
+      summary: start the game
+      description: >-
+        Allows the user component to request to start the game. Note that to
+        start the game, the requesting user must be the host, and there must be
+        at least 2 players.
+      operationId: api.user_start
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - game starting
+        '400':
+          description: Bad Request - not session host or start unsuccessful
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+  /user/movement:
+    post:
+      tags:
+        - gameplay
+      summary: Move the user character
+      description: >-
+        Allows the user component to control the movement of their character.
+        The direction is specified in the request body. Characters can move left
+        (1) or right (2), up (3) or down (4). Will return with 200 OK whether
+        the desired movement was successful or not.
+      operationId: api.user_movement
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      requestBody:
+        description: direction of movement
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  enum: ['left', 'right', 'up', 'down']
+      responses:
+        '200':
+          description: OK - operation processed
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+  /user/place:
+    post:
+      tags:
+        - gameplay
+      summary: Place an object on the field
+      description: >-
+        Allows the user component to place an entity on the playing field. The
+        type of object to place is specified by 'entity_type' in the request
+        body. Will return with 200 OK whether the desired placement was achieved
+        or not.
+      operationId: api.user_place
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      requestBody:
+        description: Entity to place on the field.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entity_type:
+                  type: integer
+        required: true
+      responses:
+        '200':
+          description: OK - request processed
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+  /user/status:
+    get:
+      tags:
+        - gameplay
+      summary: Obtain character status
+      description: >-
+        Allows the user component to obtain the current status of their
+        character. This information includes health if the game is ongoing, and
+        ranking if the game is over.
+      operationId: api.user_status
+      parameters:
+        - name: id
+          in: cookie
+          description: identifier for this user in this session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - status returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  health:
+                    type: integer
+                  ranking:
+                    type: integer
+        '401':
+          description: Unauthenticated - not a recognized user for this session
+components:
+  schemas:
+    Entity:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_type:
+          type: integer
+        position_x:
+          type: integer
+        position_y:
+          type: integer
+    Event_Damage:
+      type: object
+      properties:
+        id: 
+          type: integer
+        cause_id:
+          type: integer
+        delay:
+          type: integer
+        damage:
+          type: integer
+        position_x:
+          type: integer
+        position_y: 
+          type: integer
+    Event_Movement:
+      type: object
+      properties:
+        id: 
+          type: integer
+        cause_id:
+          type: integer
+        delay:
+          type: integer
+        distance:
+          type: integer
+        direction:
+          type: string
+          enum: 
+            - "left"
+            - "right"
+            - "up"
+            - "down"
+        position_x:
+          type: integer
+        position_y:
+          type: integer
+    Event_Resolution:
+      type: object
+      properties:
+        id: 
+          type: integer
+        target_player:
+          type: integer
+        effect:
+          type: string
+          enum: 
+            - "damage"
+            - "movement"
+        magnitude:
+          type: integer
+        modifier:
+          type: integer
+    Simple_Damage:
+      type: object
+      properties:
+        target_player:
+          type: integer
+        damage:
+          type: integer
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: integer
+        current_count:
+          type: integer
+        max_count:
+          type: integer
+        host:
+          type: boolean
+        state:
+          type: string
+          enum: 
+            - "empty"
+            - "waiting"
+            - "active"

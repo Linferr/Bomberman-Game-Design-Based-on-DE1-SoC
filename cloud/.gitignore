@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*backup.py
+design_docs/render/
+server/*test.py
+integration/
+users.db

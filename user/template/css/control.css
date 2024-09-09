@@ -1,0 +1,240 @@
+/* Author: Shibo Jin 
+ * Team: CPEN391 Group 26
+ */
+
+.container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    margin-top: 60px;
+    height: 600px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+}
+
+.button {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    /*background-color: #78adbf;*/
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.button img{
+    width: 90px;
+}
+.up {
+    top: 5%;
+}
+
+.left {
+    left: 5%;
+}
+
+.right {
+    right: 5%;
+}
+
+.down {
+    bottom: 5%;
+}
+
+.place {
+    width: 20px;
+    height: 40px;
+    /*background-color: #4cae4c;*/
+    background-color: transparent;
+    color: white;
+    border: none;
+    text-align: center;
+    line-height: 60px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 8px;
+}
+
+.opt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch1 {
+    position: absolute;
+    left: 60px;
+    bottom: -65px;
+    width: 120px;
+    height: 50px;
+    background-color: #4cae4c;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.switch2 {
+    position: absolute;
+    left: 195px;
+    bottom: -65px;
+    width: 120px;
+    height: 50px;
+    background-color: #4cae4c;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.switch3 {
+    position: absolute;
+    left: 330px;
+    bottom: -65px;
+    width: 120px;
+    height: 50px;
+    background-color: #4cae4c;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.container0{
+    position: absolute;
+    top: 0;
+    margin-top: -90px;
+}
+
+.place img{
+    width: 80px;
+}
+
+@media screen and (max-height: 500px) {
+    .container1 {
+        height: 300px;
+        padding: 0;
+        margin: 12px 0;
+    }
+    .buttons {
+        width: 200px;
+        height: 200px;
+    }
+    .container0{
+        margin-top: -60px;
+    }
+    .container0 img{
+        width: 50px;
+    }
+    .button{
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .switch1{
+        width: 70px;
+        height: 35px;
+        left: -10px;
+        bottom: -40px;
+
+    }
+    .switch2{
+        width: 70px;
+        height: 35px;
+        left: 70px;
+        bottom: -40px;
+    }
+    .switch3{
+        width: 70px;
+        height: 35px;
+        left: 150px;
+        bottom: -40px;
+    }
+    .button img{
+        width: 50px;
+    }
+    .place img{
+        width: 25px;
+    }
+}
+@media screen and (max-width: 400px) {
+
+    .buttons {
+        width: 380px;
+        height: 380px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .button {
+        width: 120px;
+        height: 120px;
+    }
+    .switch1{
+        width: 100px;
+        height: 55px;
+        left: 20px;
+
+    }
+    .switch2{
+        width: 100px;
+        height: 55px;
+        left: 130px;
+
+    }
+    .switch3{
+        width: 100px;
+        height: 55px;
+        left: 240px;
+    }
+    .button img{
+        width: 125px;
+    }
+    .place img{
+        width: 60px;
+    }
+}

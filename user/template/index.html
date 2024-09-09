@@ -1,0 +1,129 @@
+<!--
+Author: Shibo Jin
+Team: CPEN391 Group 26
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>POP BOMB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="POP BOMB Game Home Web">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+<!-- css -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</head>
+<body> 
+<!-- Header -->
+	<div class="header">
+		<!-- Navbar -->
+		<nav class="navbar navbar-default">
+			<div class="container">
+
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a  href="index"><h1>POP <img src="images/bomb_icon_128x128.png" alt="bomb_icon"> BOMB</h1></a>
+				</div>
+
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="hover-effect active"><a href="index">Home</a></li>
+						<li class="hover-effect"><a href="about">Rules</a></li>
+						<li class="hover-effect"><a href="games">Game</a></li>
+						<li class="hover-effect"><a href="user">User</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+		<!-- //Navbar -->
+
+		<!-- Slider -->
+		<div class="slider">
+			<ul class="rslides" id="slider">
+				<li>
+					<img src="images/p1.png" alt="" />
+				</li>
+				<li>
+					<img src="images/p2.png" alt="" />
+				</li>
+				<li>
+					<img src="images/p3.png" alt="" />
+				</li>
+				<li>
+					<img src="images/background.jpg" alt="" />
+				</li>
+			</ul>
+		</div>
+		<!-- //Slider -->
+
+	</div>
+	<!-- Banner-Slider-JavaScript -->
+	<script src="js/responsiveslides.min.js"></script>
+	<script>
+		$(function () {
+			$("#slider").responsiveSlides({
+				auto: true,
+				nav: true,
+				speed: 800,
+				namespace: "callbacks",
+				pager: true,
+			});
+		});
+	</script>
+	<!-- //Banner-Slider-JavaScript -->
+	<!-- //Header -->
+
+
+<!-- services-->
+<div class="services-agileits-w3layouts">
+	<div class="container">
+		<h3>Rules</h3>
+		<div class="col-md-3 service-grid-agileits service-grid-agileits-top">
+			<h4>Players</h4>
+			<p>2 players minimum. Support 4 players maximum.</p>
+			<a href="about">Read More</a>
+		</div>
+		<div class="col-md-3 service-grid-agileits">
+			<h4>Playing area</h4>
+			<p>The play area is composed of a 15x15 grid of square tiles.</p>
+			<a href="about">Read More</a>
+		</div>
+		<div class="col-md-3 service-grid-agileits service-grid-agileits-bottom">
+			<h4>Play method</h4>
+			<p>Players compete by laying bombs on the tile they are currently on. Once placed on a tile, a bomb will explode after a short duration, damaging players caught in the explosion radius.</p>
+			<a href="about">Read More</a>
+		</div>
+		<div class="col-md-3 service-grid-agileits service-grid-agileits-bottom">
+			<h4>Winner</h4>
+			<p>Players who lose all their health points are knocked out of the round. The game is over once there is only one player remaining, who is declared the winner.</p>
+			<a href="about">Read More</a>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<!-- //services-->
+
+
+<!-- footer -->
+<div class="footer">
+	<div class="container">
+		<div class="copyright">
+			<p>&copy; POP BOMB Game. Designed by CPEN391 Group 26</a></p>
+		</div>
+	</div>
+</div>
+
+<!-- //footer -->
+</body>
+</html>

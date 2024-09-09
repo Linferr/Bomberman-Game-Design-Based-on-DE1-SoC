@@ -1,0 +1,32 @@
+Website template:
+Design by W3layouts
+Author: W3layout
+Author URL: https://w3layouts.com/template/kids-video-game-website-template/
+-------------------------------------------------------------------------------
+JavaScript template:
+Project from CPEN322
+Author: Shibo Jin
+Author URL: https://github.com/ubc-cpen322-2022/project-ShiboJin
+-------------------------------------------------------------------------------
+JQuery:
+Version: jQuery v1.11.1
+Author： 2005, 2014 jQuery Foundation, Inc. 
+URL: jquery.org/license
+-------------------------------------------------------------------------------
+Responsiveslides:
+Version: v1.54
+Aythor: @viljamis
+URL: http://responsiveslides.com 
+-------------------------------------------------------------------------------
+Bootstrap: 
+Version: v3.3.4 (http://getbootstrap.com)
+Copyright 2011-2015 Twitter, Inc.
+Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+-------------------------------------------------------------------------------
+Image Refrence:
+background.jpg: https://thehungryjpeg.com/product/3674315-cartoon-bomb-icon-with-text
+p2.png: https://dimensional-heroes.fandom.com/wiki/Bomb_Kirby?file=Bomb_Kirby.png
+p3.png: https://dribbble.com/shots/7801643-Bomb/attachments/460843?mode=media
+bomb_icon_128x128.png: https://www.tukuppt.com/muban/bagxjvvm.html
+bomb_rules.png: https://pixabay.com/zh/vectors/bomb-cartoon-iconic-2025548/
+char1-4.png: https://www.nintendo.com/
